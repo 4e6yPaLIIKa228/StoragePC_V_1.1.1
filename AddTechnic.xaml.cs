@@ -38,7 +38,6 @@ namespace YchetPer
         {
             CbFill();
             this.Close();
-
         }
         public void CbFill()  //Данные для комбобоксов 
         {
@@ -88,7 +87,7 @@ namespace YchetPer
                     CbTitle.ItemsSource = dt5.DefaultView;
                     CbTitle.DisplayMemberPath = "Title";
                     CbTitle.SelectedValuePath = "ID";
-                    //////----------------------------------------------
+                    //----------------------------------------------
                 }
                 catch (Exception ex)
                 {

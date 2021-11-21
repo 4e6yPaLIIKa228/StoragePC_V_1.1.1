@@ -33,14 +33,15 @@ namespace YchetPer
             InitializeComponent();
             DisplayData();
             CbFill();
-            DGAllEmp.Columns[0].IsReadOnly = true;
-            DGAllEmp.Columns[1].IsReadOnly = true;
-            DGAllEmp.Columns[2].IsReadOnly = true;
-            DGAllEmp.Columns[3].IsReadOnly = true;
-            DGAllEmp.Columns[4].IsReadOnly = true;
-            DGAllEmp.Columns[5].IsReadOnly = true;
-            DGAllEmp.Columns[6].IsReadOnly = true;
-            
+            //DGAllEmp.Columns[0].ColumnTextWidth = 3;
+            //DGAllEmp.Columns[0].IsReadOnly = true;
+            //DGAllEmp.Columns[1].IsReadOnly = true;
+            //DGAllEmp.Columns[2].IsReadOnly = true;
+            //DGAllEmp.Columns[3].IsReadOnly = true;
+            //DGAllEmp.Columns[4].IsReadOnly = true;
+            //DGAllEmp.Columns[5].IsReadOnly = true;
+            //DGAllEmp.Columns[6].IsReadOnly = true;
+            //DGAllEmp.Columns[].IsReadOnly = true;
         }
         public void DisplayData()
         {
@@ -49,7 +50,7 @@ namespace YchetPer
                 try
                 {
                     connection.Open();
-                    string query = $@"SELECT Devices.ID, Types.Class, Titles.Title, Devices.Number, Conditions.Condition ,NumberKabs.NumKab ,Devices.StartWork,Users.Login
+                    string query = $@"SELECT Devices.ID, Types.Class, Titles.Title, Devices.Number, Conditions.Condition ,NumberKabs.NumKab ,Devices.StartWork,Users.Login, Brands.Brand, Gadgets.Gadget, Models.Model
                                         FROM Devices JOIN  Types
                                         ON Devices.IDType = Types.ID
                                         JOIN  Conditions
@@ -59,7 +60,13 @@ namespace YchetPer
                                         JOIN Titles
                                         ON Devices.IDTitle = Titles.ID
 										JOIN Users
-										ON Devices.IDAddUser = Users.ID;";
+										ON Devices.IDAddUser = Users.ID
+										JOIN Brands
+										ON Devices.IDBrand = Brands.ID
+										JOIN Gadgets
+										On Devices.IDGadget = Gadgets.ID
+										JOIN Models
+										ON Devices.IDModel = Models.ID;";
                     SQLiteCommand cmd = new SQLiteCommand(query, connection);
                     DataTable DT = new DataTable("Devices");
                     SQLiteDataAdapter SDA = new SQLiteDataAdapter(cmd);
@@ -154,28 +161,38 @@ namespace YchetPer
                     string query1 = $@"SELECT * FROM Types"; // Типы
                     string query2 = $@"SELECT * FROM Conditions"; // Состояние
                     string query3 = $@"SELECT * FROM NumberKabs"; // Кабинеты
+                    string query4 = $@"SELECT * FROM Brands"; // Бренд
                     string query5 = $@"SELECT * FROM Titles"; // Устройства
+                    string query6 = $@"SELECT * FROM Models"; // Устройства
+
                     //----------------------------------------------
                     SQLiteCommand cmd1 = new SQLiteCommand(query1, connection);
                     SQLiteCommand cmd2 = new SQLiteCommand(query2, connection);
                     SQLiteCommand cmd3 = new SQLiteCommand(query3, connection);
+                    SQLiteCommand cmd4 = new SQLiteCommand(query4, connection);
                     SQLiteCommand cmd5 = new SQLiteCommand(query5, connection);
+                    SQLiteCommand cmd6 = new SQLiteCommand(query6, connection);
                     //----------------------------------------------
                     SQLiteDataAdapter SDA1 = new SQLiteDataAdapter(cmd1);
                     SQLiteDataAdapter SDA2 = new SQLiteDataAdapter(cmd2);
                     SQLiteDataAdapter SDA3 = new SQLiteDataAdapter(cmd3);
+                    SQLiteDataAdapter SDA4 = new SQLiteDataAdapter(cmd4);
                     SQLiteDataAdapter SDA5 = new SQLiteDataAdapter(cmd5);
+                    SQLiteDataAdapter SDA6 = new SQLiteDataAdapter(cmd6);
                     //----------------------------------------------
                     DataTable dt1 = new DataTable("Types");
                     DataTable dt2 = new DataTable("Conditions");
                     DataTable dt3 = new DataTable("NumberKabs");
-                    DataTable dt4 = new DataTable("Devices");
+                    DataTable dt4 = new DataTable("Brands");
                     DataTable dt5 = new DataTable("Titles");
+                    DataTable dt6 = new DataTable("Models");
                     //----------------------------------------------
                     SDA1.Fill(dt1);
                     SDA2.Fill(dt2);
                     SDA3.Fill(dt3);
+                    SDA4.Fill(dt4);
                     SDA5.Fill(dt5);
+                    SDA6.Fill(dt6);
                     //----------------------------------------------
                     CbClass.ItemsSource = dt1.DefaultView;
                     CbClass.DisplayMemberPath = "Class";
@@ -189,9 +206,17 @@ namespace YchetPer
                     CbNumKab.DisplayMemberPath = "NumKab";
                     CbNumKab.SelectedValuePath = "ID";
                     //----------------------------------------------
+                    CbBrand.ItemsSource = dt4.DefaultView;
+                    CbBrand.DisplayMemberPath = "Brand";
+                    CbBrand.SelectedValuePath = "ID";
+                    //----------------------------------------------
                     CbTitle.ItemsSource = dt5.DefaultView;
                     CbTitle.DisplayMemberPath = "Title";
                     CbTitle.SelectedValuePath = "ID";
+                    //----------------------------------------------
+                    CbModel.ItemsSource = dt6.DefaultView;
+                    CbModel.DisplayMemberPath = "Model";
+                    CbModel.SelectedValuePath = "ID";
                 }
                 catch (Exception ex)
                 {
@@ -337,6 +362,86 @@ namespace YchetPer
                 }
             }
         }
+
+        private void BtSearch_Click(object sender, RoutedEventArgs e)
+        {
+        }
+
+        //public void OnComboboxTextChanged(object sender, RoutedEventArgs e)
+        //{
+        //    using (SQLiteConnection connection = new SQLiteConnection(DBConnection.myConn))
+        //    {
+        //        try
+        //        {
+        //            connection.Open();
+        //            string query1 = $@"SELECT * FROM Types"; // Типы
+        //            string query2 = $@"SELECT * FROM Conditions"; // Состояние
+        //            string query3 = $@"SELECT * FROM NumberKabs"; // Кабинеты
+        //            string query4 = $@"SELECT * FROM Brands"; // Бренд
+        //            string query5 = $@"SELECT * FROM Titles"; // Устройства
+
+        //            //----------------------------------------------
+        //            SQLiteCommand cmd1 = new SQLiteCommand(query1, connection);
+        //            SQLiteCommand cmd2 = new SQLiteCommand(query2, connection);
+        //            SQLiteCommand cmd3 = new SQLiteCommand(query3, connection);
+        //            SQLiteCommand cmd4 = new SQLiteCommand(query4, connection);
+        //            SQLiteCommand cmd5 = new SQLiteCommand(query5, connection);
+        //            //----------------------------------------------
+        //            SQLiteDataAdapter SDA1 = new SQLiteDataAdapter(cmd1);
+        //            SQLiteDataAdapter SDA2 = new SQLiteDataAdapter(cmd2);
+        //            SQLiteDataAdapter SDA3 = new SQLiteDataAdapter(cmd3);
+        //            SQLiteDataAdapter SDA4 = new SQLiteDataAdapter(cmd4);
+        //            SQLiteDataAdapter SDA5 = new SQLiteDataAdapter(cmd5);
+        //            //----------------------------------------------
+        //            DataTable dt1 = new DataTable("Types");
+        //            DataTable dt2 = new DataTable("Conditions");
+        //            DataTable dt3 = new DataTable("NumberKabs");
+        //            DataTable dt4 = new DataTable("Brands");
+        //            DataTable dt5 = new DataTable("Titles");
+        //            //----------------------------------------------
+        //            SDA1.Fill(dt1);
+        //            SDA2.Fill(dt2);
+        //            SDA3.Fill(dt3);
+        //            SDA4.Fill(dt4);
+        //            SDA5.Fill(dt5);
+        //            //----------------------------------------------
+        //            CbClass.ItemsSource = dt1.DefaultView;
+        //            CbClass.DisplayMemberPath = "Class";
+        //            CbClass.SelectedValuePath = "ID";
+        //            //----------------------------------------------
+        //            CbCondition.ItemsSource = dt2.DefaultView;
+        //            CbCondition.DisplayMemberPath = "Condition";
+        //            CbCondition.SelectedValuePath = "ID";
+        //            //----------------------------------------------
+        //            CbNumKab.ItemsSource = dt3.DefaultView;
+        //            CbNumKab.DisplayMemberPath = "NumKab";
+        //            CbNumKab.SelectedValuePath = "ID";
+        //            //----------------------------------------------
+        //            CbBrand.ItemsSource = dt4.DefaultView;
+        //            CbBrand.DisplayMemberPath = "Brand";
+        //            CbBrand.SelectedValuePath = "ID";
+        //            CbBrand.SelectedIndex = -1;
+
+        //            string test = CbBrand.Text.ToString();
+        //            CbBrand.IsDropDownOpen = true;
+        //            // убрать selection, если dropdown только открылся
+        //            var tb = (TextBox)e.OriginalSource;
+        //            tb.Select(tb.SelectionStart + tb.SelectionLength, 0);
+        //            CollectionView cv = (CollectionView)CollectionViewSource.GetDefaultView(CbBrand.DisplayMemberPath);
+        //            cv.Filter = s =>
+        //                ((string)s).IndexOf(CbBrand.Text, StringComparison.CurrentCultureIgnoreCase) >= 0;
+        //            //----------------------------------------------
+        //            CbTitle.ItemsSource = dt5.DefaultView;
+        //            CbTitle.DisplayMemberPath = "Title";
+        //            CbTitle.SelectedValuePath = "ID";
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            MessageBox.Show(ex.Message);
+        //        }
+        //    }
+
+        //}
     }
 }
 
