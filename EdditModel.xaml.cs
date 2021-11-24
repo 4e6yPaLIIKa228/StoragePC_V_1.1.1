@@ -3,18 +3,18 @@ using System.Windows;
 using System.Data.SQLite;
 using YchetPer.Connection;
 
-
 namespace YchetPer
 {
     /// <summary>
-    /// Логика взаимодействия для EdditTitle.xaml
+    /// Логика взаимодействия для EdditModel.xaml
     /// </summary>
-    public partial class EdditTitle : Window
+    public partial class EdditModel : Window
     {
-        public EdditTitle()
+        public EdditModel()
         {
             InitializeComponent();
         }
+
         private void BtnAdd_Click(object sender, RoutedEventArgs e)
         {
             using (SQLiteConnection connection = new SQLiteConnection(DBConnection.myConn))
@@ -27,11 +27,11 @@ namespace YchetPer
                 else
                 {
                     connection.Open();
-                    string query = $@"INSERT INTO Titles('Title') values (@Title)";
+                    string query = $@"INSERT INTO Models('Model') values (@Model)";
                     SQLiteCommand cmd = new SQLiteCommand(query, connection);
                     try
                     {
-                        cmd.Parameters.AddWithValue("@Title", TbTitl.Text);
+                        cmd.Parameters.AddWithValue("@Model", TbTitl.Text);
                         cmd.ExecuteNonQuery();
                         this.Close();
                     }

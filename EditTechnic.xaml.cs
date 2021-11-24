@@ -1,37 +1,33 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Data;
+using System.Data.SQLite;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.Data.SQLite;
 using YchetPer.Connection;
-using System.Data.SqlClient;
-using System.Data;
-using System.Drawing;
-using System.IO;
-using Microsoft.Win32;
 
 namespace YchetPer
 {
     /// <summary>
-    /// Логика взаимодействия для AddTechnic.xaml
+    /// Логика взаимодействия для EditTechnic.xaml
     /// </summary>
-    public partial class AddTechnic : Window
+    public partial class EditTechnic : Window
     {
-        DataTable dt1 = new DataTable("NumberKabs");
-        public AddTechnic()
+        string idi;
+        public EditTechnic(DataRowView drv)
         {
             InitializeComponent();
             CbFill();
+            CbClass.Text = drv["Class"].ToString();
+            CbTitle.Text = drv["Title"].ToString();
+            CbBrand.Text = drv["Brand"].ToString();
+            CbModel.Text = drv["Model"].ToString();
+            CbNumKab.Text = drv["NumKab"].ToString();
+            TbNumber.Text = drv["Number"].ToString();
+            CbCondition.Text = drv["Condition"].ToString();
+            StartWork.Text = drv["StartWork"].ToString();
+            idi = drv["ID"].ToString();
         }
 
         private void BtnBack_Click(object sender, RoutedEventArgs e)
@@ -163,7 +159,7 @@ namespace YchetPer
                 try
                 {
                     connection.Open();
-                    string query5 = $@"SELECT * FROM Brands"; 
+                    string query5 = $@"SELECT * FROM Brands";
                     SQLiteCommand cmd5 = new SQLiteCommand(query5, connection);
                     SQLiteDataAdapter SDA5 = new SQLiteDataAdapter(cmd5);
                     DataTable dt5 = new DataTable("Brands");
@@ -200,48 +196,52 @@ namespace YchetPer
                 }
             }
         }
-
-        private void BtnAdd_Click(object sender, RoutedEventArgs e) //Добавление
+        public void UpdateDevices()
         {
             using (SQLiteConnection connection = new SQLiteConnection(DBConnection.myConn))
             {
                 connection.Open();
-                if (String.IsNullOrEmpty(TbNumber.Text) || String.IsNullOrEmpty(CbClass.Text) || CbNumKab.SelectedIndex == -1 || CbCondition.SelectedIndex == -1 || CbTitle.SelectedIndex ==-1 || CbBrand.SelectedIndex == -1 || CbModel.SelectedIndex == -1)
+                if ((String.IsNullOrEmpty(TbNumber.Text) || String.IsNullOrEmpty(CbClass.Text) || CbNumKab.SelectedIndex == -1 || CbCondition.SelectedIndex == -1 || CbTitle.SelectedIndex == -1 || CbBrand.SelectedIndex == -1 || CbModel.SelectedIndex == -1))
                 {
                     MessageBox.Show("Заполните все поля", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
                 else
                 {
-                int id, id2, id3, id4,id5,id6;
-                bool resultClass = int.TryParse(CbClass.SelectedValue.ToString(), out id);
-                bool resultKab = int.TryParse(CbNumKab.SelectedValue.ToString(), out id2);
-                bool resultCon = int.TryParse(CbCondition.SelectedValue.ToString(), out id3);
-                bool resultTitl = int.TryParse(CbTitle.SelectedValue.ToString(), out id4);
-                bool resultBrand = int.TryParse(CbBrand.SelectedValue.ToString(), out id5);
-                bool resultModel = int.TryParse(CbModel.SelectedValue.ToString(), out id6);
-                var UserAdd = Saver.ID;
-                var numkab = TbNumber.Text;
-                var number = TbNumber.Text;
-                var idtype = CbClass.Text;
-                var idcon = CbCondition.Text;
-                var startWork = StartWork.Text;
-
-                    string query = $@"INSERT INTO Devices(IDType,IDKabuneta,IDTitle,IDBrand,IDModel,Number,IDCondition,StartWork,IDAddUser) values ('{id}',{id2},'{id4}','{id5}','{id6}','{number}','{id3}','{startWork}',{UserAdd});";
+                    int id, id2, id3, id4, id5, id6;
+                    bool resultClass = int.TryParse(CbClass.SelectedValue.ToString(), out id);
+                    bool resultKab = int.TryParse(CbNumKab.SelectedValue.ToString(), out id2);
+                    bool resultCon = int.TryParse(CbCondition.SelectedValue.ToString(), out id3);
+                    bool resultTitl = int.TryParse(CbTitle.SelectedValue.ToString(), out id4);
+                    bool resultBrand = int.TryParse(CbBrand.SelectedValue.ToString(), out id5);
+                    bool resultModel = int.TryParse(CbModel.SelectedValue.ToString(), out id6);
+                    string query = $@"UPDATE Devices SET IDType=@IDType, IDKabuneta=@IDKabuneta, IDTitle=@IDTitle,IDBrand=@IDBrand,IDModel=@IDModel, Number=@Number, IDCondition=@IDCondition, StartWork=@StartWork WHERE ID=@ID;";
                     SQLiteCommand cmd = new SQLiteCommand(query, connection);
                     try
                     {
+                        cmd.Parameters.AddWithValue("@ID", idi);
+                        cmd.Parameters.AddWithValue("@IDType", id);
+                        cmd.Parameters.AddWithValue("@IDKabuneta", id2);
+                        cmd.Parameters.AddWithValue("@IDTitle", id4);
+                        cmd.Parameters.AddWithValue("@IDBrand", id5);
+                        cmd.Parameters.AddWithValue("@IDModel", id6);
+                        cmd.Parameters.AddWithValue("@Number", TbNumber.Text);
+                        cmd.Parameters.AddWithValue("@IDCondition", id3);
+                        cmd.Parameters.AddWithValue("@StartWork", StartWork.Text);
                         cmd.ExecuteNonQuery();
-                        MessageBox.Show("Информация добавленна");
-                        this.Close();
-                    }
+                        MessageBox.Show("Данные изменены");
 
-                    catch(SQLiteException)
+                    }
+                    catch (SQLiteException ex)
                     {
-                        MessageBox.Show("Такой номер занят!" );
-                        TbNumber.Clear();
+                        MessageBox.Show("Error: " + ex.Message);
                     }
                 }
             }
+        }
+        private void BtnEddit_Click(object sender, RoutedEventArgs e) //Добавление
+        {
+            UpdateDevices();
+            this.Close();
         }
 
         private void BtnAddKab_Click(object sender, RoutedEventArgs e)
@@ -252,8 +252,8 @@ namespace YchetPer
             switch (result)
             {
                 default:
-                CbKab();
-                break;
+                    CbKab();
+                    break;
             }
         }
 
@@ -262,7 +262,7 @@ namespace YchetPer
             CheckDeletetKab();
             CbKab();
         }
-       
+
 
         private void BtnAddTitl_Click(object sender, RoutedEventArgs e)
         {
@@ -273,7 +273,7 @@ namespace YchetPer
             {
                 default:
                     CbTitl();
-                break;
+                    break;
             }
         }
 
@@ -476,8 +476,8 @@ namespace YchetPer
             switch (result)
             {
                 default:
-                CbBrands();
-                break;
+                    CbBrands();
+                    break;
             }
         }
 
@@ -495,8 +495,8 @@ namespace YchetPer
             switch (result)
             {
                 default:
-                CbModels();
-                break;
+                    CbModels();
+                    break;
             }
         }
 

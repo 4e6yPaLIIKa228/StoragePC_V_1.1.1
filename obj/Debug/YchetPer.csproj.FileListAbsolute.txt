@@ -457,7 +457,6 @@ C:\Users\Administrator\source\repos\StoragePC_V_1.1-main\bin\Debug\EntityFramewo
 C:\Users\Administrator\source\repos\StoragePC_V_1.1-main\bin\Debug\EntityFramework.SqlServer.xml
 C:\Users\Administrator\source\repos\StoragePC_V_1.1-main\bin\Debug\System.Data.SQLite.xml
 C:\Users\Administrator\source\repos\StoragePC_V_1.1-main\bin\Debug\System.ValueTuple.xml
-C:\Users\Administrator\source\repos\StoragePC_V_1.1-main\obj\Debug\YchetPer.csprojAssemblyReference.cache
 C:\Users\Administrator\source\repos\StoragePC_V_1.1-main\obj\Debug\AddTechnic.g.cs
 C:\Users\Administrator\source\repos\StoragePC_V_1.1-main\obj\Debug\Authoriz.g.cs
 C:\Users\Administrator\source\repos\StoragePC_V_1.1-main\obj\Debug\Eddit.g.cs
@@ -483,3 +482,10 @@ C:\Users\Administrator\source\repos\StoragePC_V_1.1-main\obj\Debug\YchetPer.cspr
 C:\Users\Administrator\source\repos\StoragePC_V_1.1-main\obj\Debug\YchetPer.csproj.CopyComplete
 C:\Users\Administrator\source\repos\StoragePC_V_1.1-main\obj\Debug\YchetPer.exe
 C:\Users\Administrator\source\repos\StoragePC_V_1.1-main\obj\Debug\YchetPer.pdb
+C:\Users\Administrator\source\repos\StoragePC_V_1.1-main\obj\Debug\EditTechnic.g.cs
+C:\Users\Administrator\source\repos\StoragePC_V_1.1-main\obj\Debug\EditTechnic.baml
+C:\Users\Administrator\source\repos\StoragePC_V_1.1-main\obj\Debug\YchetPer.csprojAssemblyReference.cache
+C:\Users\Administrator\source\repos\StoragePC_V_1.1-main\obj\Debug\EdditBrand.g.cs
+C:\Users\Administrator\source\repos\StoragePC_V_1.1-main\obj\Debug\EdditModel.g.cs
+C:\Users\Administrator\source\repos\StoragePC_V_1.1-main\obj\Debug\EdditBrand.baml
+C:\Users\Administrator\source\repos\StoragePC_V_1.1-main\obj\Debug\EdditModel.baml

@@ -50,7 +50,7 @@ namespace YchetPer
                 try
                 {
                     connection.Open();
-                    string query = $@"SELECT Devices.ID, Types.Class, Titles.Title, Devices.Number, Conditions.Condition ,NumberKabs.NumKab ,Devices.StartWork,Users.Login, Brands.Brand, Gadgets.Gadget, Models.Model
+                    string query = $@"SELECT Devices.ID, Types.Class, Titles.Title, Devices.Number, Conditions.Condition ,NumberKabs.NumKab ,Devices.StartWork,Users.Login, Brands.Brand, Models.Model
                                         FROM Devices JOIN  Types
                                         ON Devices.IDType = Types.ID
                                         JOIN  Conditions
@@ -62,9 +62,7 @@ namespace YchetPer
 										JOIN Users
 										ON Devices.IDAddUser = Users.ID
 										JOIN Brands
-										ON Devices.IDBrand = Brands.ID
-										JOIN Gadgets
-										On Devices.IDGadget = Gadgets.ID
+										ON Devices.IDBrand = Brands.ID					
 										JOIN Models
 										ON Devices.IDModel = Models.ID;";
                     SQLiteCommand cmd = new SQLiteCommand(query, connection);
@@ -125,31 +123,29 @@ namespace YchetPer
 
         }
 
+       private void Eddit()
+        {
+            if (DGAllEmp.SelectedIndex != -1)
+            {
+                EditTechnic editTech = new EditTechnic((DataRowView)DGAllEmp.SelectedItem);
+                editTech.Owner = this;
+                bool? result = editTech.ShowDialog();
+                switch (result)
+                {
+                    default:
+                        DisplayData();
+                        break;
+                }
+            }
+            else
+            {
+                MessageBox.Show("Выберите строку с данными,чтобы ее изменить");
+            }
+        }
         private void DGAllEmp_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             CbFill();
-            BtnEdd.IsEnabled = true;
-            using (SQLiteConnection connection = new SQLiteConnection(DBConnection.myConn))
-            {
-                if (DGAllEmp.SelectedItems.Count > 0)
-                {
-                    DataRowView row = (DataRowView)DGAllEmp.SelectedItems[0];
-                    CbClass.Text = row["Class"].ToString();
-                    CbTitle.Text = row["Title"].ToString();
-                    CbNumKab.Text = row["NumKab"].ToString();
-                    TbNumber.Text = row["Number"].ToString();
-                    CbCondition.Text = row["Condition"].ToString();
-                    StartWork.Text = row["StartWork"].ToString();
-                    //TbID.Text = row["ID"].ToString();
-
-                }
-                else
-                {
-                    //MessageBox.Show("Please Select Any Employee From List...");
-                }
-
-
-            }
+            Eddit();
         }
         public void CbFill()  //Данные для комбобоксов 
         {
@@ -248,31 +244,31 @@ namespace YchetPer
         //            var startWork = StartWork.Text;
         //            var ID = TbID.Text;
         //            connection.Open();
-        //            string query = $@"UPDATE Devices SET IDType=@IDType, IDKabuneta=@IDKabuneta, IDTitle=@IDTitle, Number=@Number, IDCondition=@IDCondition, StartWork=@StartWork WHERE ID=@ID;";
-        //            SQLiteCommand cmd = new SQLiteCommand(query, connection);
-        //            try
-        //            {
-        //                cmd.Parameters.AddWithValue("@IDType", id);
-        //                cmd.Parameters.AddWithValue("@IDKabuneta", id2);
-        //                cmd.Parameters.AddWithValue("@IDTitle", id4);
-        //                cmd.Parameters.AddWithValue("@Number", number);
-        //                cmd.Parameters.AddWithValue("@IDCondition", id3);
-        //                cmd.Parameters.AddWithValue("@StartWork", startWork);
-        //                cmd.Parameters.AddWithValue("@ID", ID);
-        //                cmd.ExecuteNonQuery();
-        //                MessageBox.Show("Данные изменены");
-        //                DisplayData();
-        //            }
+    //    string query = $@"UPDATE Devices SET IDType=@IDType, IDKabuneta=@IDKabuneta, IDTitle=@IDTitle, Number=@Number, IDCondition=@IDCondition, StartWork=@StartWork WHERE ID=@ID;";
+    //    SQLiteCommand cmd = new SQLiteCommand(query, connection);
+    //                try
+    //                {
+    //                    cmd.Parameters.AddWithValue("@IDType", id);
+    //                    cmd.Parameters.AddWithValue("@IDKabuneta", id2);
+    //                    cmd.Parameters.AddWithValue("@IDTitle", id4);
+    //                    cmd.Parameters.AddWithValue("@Number", number);
+    //                    cmd.Parameters.AddWithValue("@IDCondition", id3);
+    //                    cmd.Parameters.AddWithValue("@StartWork", startWork);
+    //                    cmd.Parameters.AddWithValue("@ID", ID);
+    //                    cmd.ExecuteNonQuery();
+    //                    MessageBox.Show("Данные изменены");
+    //                    DisplayData();
+    //}
 
-        //            catch (SQLiteException ex)
-        //            {
-        //                MessageBox.Show("Error: " + ex.Message);
-        //            }
-        //        }
-        //    }
-        //}
+    //            catch (SQLiteException ex)
+    //            {
+    //                MessageBox.Show("Error: " + ex.Message);
+    //            }
+    //        }
+    //    }
+    //}
 
-        private void BtnExit_Click(object sender, RoutedEventArgs e)
+    private void BtnExit_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
         }
@@ -301,15 +297,6 @@ namespace YchetPer
             }
         }
 
-        private static string RndStr(int len)//геннератор пароля(временного)
-        {
-            string s = "", symb = "1234567890qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM";
-            Random rnd = new Random();
-
-            for (int i = 0; i < len; i++)
-                s += symb[rnd.Next(0, symb.Length)];
-            return s;
-        }
 
         private void BtnBack_Click(object sender, RoutedEventArgs e)
         {
@@ -365,6 +352,17 @@ namespace YchetPer
 
         private void BtSearch_Click(object sender, RoutedEventArgs e)
         {
+            //var tb = (TextBox)e.OriginalSource;
+            //tb.Select(tb.SelectionStart + tb.SelectionLength, 0);
+            //CollectionView cv = (CollectionView)CollectionViewSource.GetDefaultView(CbBrand.DisplayMemberPath);
+            //cv.Filter = s =>
+            //                ((string)s).IndexOf(TbNumber.Text, StringComparison.CurrentCultureIgnoreCase) >= 0;
+        }
+
+        private void BtnEdd_Click(object sender, RoutedEventArgs e)
+        {
+            CbFill();
+            Eddit();
         }
 
         //public void OnComboboxTextChanged(object sender, RoutedEventArgs e)
@@ -425,11 +423,11 @@ namespace YchetPer
         //            string test = CbBrand.Text.ToString();
         //            CbBrand.IsDropDownOpen = true;
         //            // убрать selection, если dropdown только открылся
-        //            var tb = (TextBox)e.OriginalSource;
-        //            tb.Select(tb.SelectionStart + tb.SelectionLength, 0);
+        //var tb = (TextBox)e.OriginalSource;
+        //tb.Select(tb.SelectionStart + tb.SelectionLength, 0);
         //            CollectionView cv = (CollectionView)CollectionViewSource.GetDefaultView(CbBrand.DisplayMemberPath);
-        //            cv.Filter = s =>
-        //                ((string)s).IndexOf(CbBrand.Text, StringComparison.CurrentCultureIgnoreCase) >= 0;
+        //cv.Filter = s =>
+        //                ((string) s).IndexOf(CbBrand.Text, StringComparison.CurrentCultureIgnoreCase) >= 0;
         //            //----------------------------------------------
         //            CbTitle.ItemsSource = dt5.DefaultView;
         //            CbTitle.DisplayMemberPath = "Title";
