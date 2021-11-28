@@ -298,7 +298,7 @@ namespace YchetPer
                         int count2 = Convert.ToInt32(cmd3.ExecuteScalar());
                         if (count2 != 0)
                         {
-                            MessageBox.Show("Это название используется", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                            MessageBox.Show("Это устройство используется", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                         }
                         else
                         {

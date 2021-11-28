@@ -118,7 +118,7 @@ namespace YchetPer
                             {
                             connection.Close();
                             TimeKod = "1";
-                            TimeKod = RndStr(2);
+                            TimeKod = RndStr(5);
                             SmtpClient Smtp = new SmtpClient("smtp.mail.ru");
                             Smtp.UseDefaultCredentials = true;
                             Smtp.EnableSsl = true;

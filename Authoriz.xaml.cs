@@ -28,7 +28,7 @@ namespace YchetPer
     /// </summary>
     public partial class Authoriz : Window
     {
-        public Authoriz()
+       public Authoriz()
         {
             InitializeComponent();
             TbLogin.MaxLength = 30;
